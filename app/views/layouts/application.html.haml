@@ -63,36 +63,25 @@
                   = link_to 'Log In', new_user_session_path, :class => 'nav-link'
 
 
-    .container.py-5
+    .subnav
+      .container
+        .d-flex
+          .mr-auto
+            %h3 Text Components
 
+          %div
+            %a.btn.btn-primary{href: '#'} New Text Component
+
+    .container.py-4
+
+      = bootstrap_flash
+      = yield
+
+        
+    %footer
       .row
-
-        .col-lg-9
-          = bootstrap_flash
-          = yield
-
-        .col-lg-3
-
-          .card.bg-faded
-            .card-block
-
-              %h3 Current report
-              %ul#report-menu-current.nav.nav-list
-                %h5= @report.name
-                %li= link_to "Live-System", "/reports/current"
-                %li= link_to "Preview", "/reports/current?preview=true"
-                
-              %h3 Other reports
-              %ul.nav.nav-list
-              - Report.find_each do |report|
-                %ul.nav.nav-pills.report-menu
-                  %h5= report.name
-                  %li.nav-item= link_to 'Live-System', present_report_path(report), {class: 'nav-link'}
-                  %li.nav-item= link_to 'Preview', preview_report_path(report), {class: 'nav-link'}
-      %footer
-        .row
-          .col-sm-8
-            %p
-              Text (c) Dr. Jakob Vicari. No Reporters Were Harmed. Gefördert durch  
-          .col-sm-4
-            =image_tag("miz-logo_v1_schrift_rechts@2x.png", height: '30', width: '250')
+        .col-sm-8
+          %p
+            Text (c) Dr. Jakob Vicari. No Reporters Were Harmed. Gefördert durch  
+        .col-sm-4
+          =image_tag("miz-logo_v1_schrift_rechts@2x.png", height: '30', width: '250')

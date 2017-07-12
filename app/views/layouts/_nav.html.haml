@@ -1,0 +1,30 @@
+.navbar.navbar-expand-md.navbar-inverse.bg-inverse
+  .container
+
+    %a.navbar-brand(href="/") story.board
+
+    %a.navbar-toggler.navbar-toggler{:data => {:toggle => 'collapse', :target => '#main-nav'}}
+      %span.navbar-toggler-icon
+
+    .collapse.navbar-collapse#main-nav
+
+      %ul.navbar-nav.mr-auto
+        - Report.all.find_each do |report|
+          %li.nav-item
+            %a.nav-link{href: present_report_path(report)}= report.name
+
+      %ul.navbar-nav
+        %li.nav-item
+          %a{href: 'https://superkuehe.de', target: '_blank', class: 'nav-link'}
+            superkuehe.de
+            %span.fa.fa-external-link
+        %li.nav-item
+          - if user_signed_in?
+            .btn-group
+              %a.nav-link.dropdown-toggle#user-menu{'data-toggle': 'dropdown', href: "#"}= current_user.name
+              %ul.dropdown-menu.dropdown-menu-right
+                %li= link_to 'My Text Components', report_text_components_path(@report, filter: {assignee_id: [current_user.id]}), :class => 'dropdown-item'
+                %li= link_to 'My Account', edit_user_registration_path, {class: 'dropdown-item'}
+                %li= link_to 'Log Out', destroy_user_session_path, {method: :delete, class: 'dropdown-item'}
+          - else
+            = link_to 'Log In', new_user_session_path, :class => 'nav-link'

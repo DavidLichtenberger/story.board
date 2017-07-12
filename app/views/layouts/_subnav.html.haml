@@ -1,0 +1,55 @@
+.subnav
+  .container
+    .d-flex
+      .subnav__item.subnav__breadcrumb
+
+        .subnav__breadcrumb__item
+          .subnav__select
+            = @report.name
+
+            %select.custom-select{onchange: 'document.location=this.value'}
+              - Report.all.find_each do |report|
+                %option{selected: @report.id === report.id, value: send("report_#{params[:controller]}_path", report)}= report.name
+
+        .subnav__breadcrumb__item
+          .subnav__select
+            - if params[:controller] == 'reports'
+              - case params[:action]
+              - when 'show'
+                Settings
+              - when 'present'
+                Live-Report
+              - when 'preview'
+                Preview-Report
+            - else
+              = params[:controller].humanize.titlecase
+
+            %select.custom-select{onchange: 'document.location=this.value'}
+              %optgroup{label: 'Sensorstory'}
+                %option{selected: params[:controller] == 'reports' && params[:action] == 'present', value: present_report_path(@report)}
+                  Live-Report
+                %option{selected: params[:controller] == 'reports' && params[:action] == 'preview', value: preview_report_path(@report)}
+                  Preview-Report
+
+              %optgroup{label: 'Elements'}
+                %option{selected: params[:controller] == 'text_components', value: report_text_components_path(@report)}
+                  Text Components
+                %option{selected: params[:controller] == 'triggers', value: report_triggers_path(@report)}
+                  Triggers
+                %option{selected: params[:controller] == 'sensors', value: report_sensors_path(@report)}
+                  Sensors
+                %option{selected: params[:controller] == 'events', value: events_path}
+                  Events
+
+              %optgroup{label: 'Settings'}
+                %option{selected: params[:controller] == 'reports' && params[:action] == 'show', value: report_path(@report)}
+                  Settings
+
+      .subnav__item
+        .btn-group
+          %a.btn.btn-primary{href: '#'} New Text Component
+          %a.btn.btn-primary.dropdown-toggle.dropdown-toggle-split{href: '#', 'data-toggle': 'dropdown'}
+          .dropdown-menu.dropdown-menu-right
+            %a.dropdown-item{href: new_report_trigger_path(@report)} New Trigger
+            %a.dropdown-item{href: new_report_sensor_path(@report)} New Sensor
+            %a.dropdown-item{href: new_event_path} New Event
